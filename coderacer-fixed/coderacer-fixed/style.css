@@ -1,0 +1,1032 @@
+@import url("https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=JetBrains+Mono:wght@400;500;700&display=swap");
+
+/* ================================================================
+   VARIABLES
+   ================================================================ */
+:root {
+  --bg: #0d0f14;
+  --surface: #151821;
+  --surface-raised: #1c2030;
+  --line: #272c3a;
+  --line-bright: #353b4d;
+  --text: #e8eaf0;
+  --text-muted: #6b7394;
+  --player: #00e5c3;
+  --player-dim: rgba(0, 229, 195, 0.15);
+  --player-glow: rgba(0, 229, 195, 0.4);
+  --ghost: #f0b429;
+  --ghost-dim: rgba(240, 180, 41, 0.12);
+  --ghost-glow: rgba(240, 180, 41, 0.4);
+  --error: #e4573d;
+  --error-dim: rgba(228, 87, 61, 0.15);
+  --accent: #7c5cfc;
+  --font-display: "Space Grotesk", system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, monospace;
+}
+
+/* ================================================================
+   RESET & BASE
+   ================================================================ */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-mono);
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ================================================================
+   HEADER
+   ================================================================ */
+.app-header {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1rem 1.5rem;
+  border-bottom: 1px solid var(--line);
+  background: linear-gradient(180deg, rgba(21, 24, 33, 0.95) 0%, var(--bg) 100%);
+}
+
+.logo-btn {
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  color: inherit;
+  font: inherit;
+  display: flex;
+  align-items: center;
+}
+
+.logo-btn:hover .logo-accent {
+  text-shadow: 0 0 12px var(--player-glow);
+}
+
+.logo {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 1.15rem;
+  letter-spacing: -0.02em;
+  white-space: nowrap;
+}
+
+.logo-accent {
+  color: var(--player);
+}
+
+.tagline {
+  color: var(--text-muted);
+  font-size: 0.8rem;
+  margin-left: auto;
+}
+
+.sound-toggle {
+  background: var(--surface-raised);
+  border: 1px solid var(--line);
+  color: var(--text-muted);
+  padding: 0.4rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+  transition: color 0.15s, border-color 0.15s;
+  flex-shrink: 0;
+}
+
+.sound-toggle:hover {
+  color: var(--text);
+  border-color: var(--line-bright);
+}
+
+.header-btn {
+  background: transparent;
+  border: 1px solid var(--line);
+  color: var(--text-muted);
+  padding: 0.4rem 0.7rem;
+  cursor: pointer;
+  font: inherit;
+  font-size: 0.75rem;
+  border-radius: 4px;
+  transition: color 0.15s, border-color 0.15s;
+}
+
+.header-btn:hover {
+  color: var(--text);
+  border-color: var(--line-bright);
+}
+
+.hidden {
+  display: none !important;
+}
+
+/* ================================================================
+   MAIN LAYOUT
+   ================================================================ */
+main {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 2rem 1.5rem 4rem;
+}
+
+/* ================================================================
+   SCREENS
+   ================================================================ */
+.screen {
+  display: none;
+}
+
+.screen.active {
+  display: block;
+  animation: screenIn 0.3s ease-out;
+}
+
+@keyframes screenIn {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ================================================================
+   PANELS
+   ================================================================ */
+.panel {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  padding: 1.75rem;
+  margin-bottom: 1.5rem;
+  position: relative;
+}
+
+h1 {
+  font-family: var(--font-display);
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin: 0 0 0.3rem;
+  letter-spacing: -0.01em;
+}
+
+h2 {
+  font-family: var(--font-display);
+  font-size: 1rem;
+  font-weight: 700;
+  margin: 0 0 0.85rem;
+  letter-spacing: -0.01em;
+}
+
+.panel-sub {
+  color: var(--text-muted);
+  font-size: 0.85rem;
+  margin: 0 0 1.5rem;
+}
+
+/* ================================================================
+   SESSION HISTORY
+   ================================================================ */
+.history-panel {
+  max-width: 680px;
+  margin: 0 auto;
+}
+
+.history-heading {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1.25rem;
+}
+
+.history-heading .panel-sub {
+  margin-bottom: 0;
+}
+
+.history-list {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 1.25rem;
+  border-top: 1px solid var(--line);
+}
+
+.history-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.85rem 0;
+  border-bottom: 1px solid var(--line);
+}
+
+.history-details {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.history-details strong {
+  color: var(--text);
+}
+
+.history-details span,
+.history-item time,
+.history-empty {
+  color: var(--text-muted);
+  font-size: 0.75rem;
+}
+
+.history-empty {
+  margin: 0 0 1.25rem;
+}
+
+
+/* ================================================================
+   HOME SCREEN
+   ================================================================ */
+.home-panel {
+  text-align: center;
+}
+
+.home-car-preview {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2.25rem 1rem;
+  margin-bottom: 1.5rem;
+  background: var(--surface-raised);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  overflow: hidden;
+  position: relative;
+}
+
+.car-preview {
+  position: static;
+  transform: none;
+  filter: drop-shadow(0 0 14px currentColor);
+  transition: color 0.2s ease;
+  animation: carFloat 2.6s ease-in-out infinite;
+}
+
+.car-preview::after {
+  display: none;
+}
+
+.car-preview .car-svg {
+  width: 120px;
+  height: auto;
+}
+
+@keyframes carFloat {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-7px);
+  }
+}
+
+.color-picker {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.8rem;
+  margin-bottom: 1.75rem;
+}
+
+.color-picker-label {
+  color: var(--text-muted);
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.color-swatches {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.6rem;
+}
+
+.color-swatch {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  border: 2px solid transparent;
+  padding: 0;
+  cursor: pointer;
+  transition: transform 0.12s ease, border-color 0.12s ease, box-shadow 0.12s ease;
+}
+
+.color-swatch:hover {
+  transform: scale(1.12);
+}
+
+.color-swatch.selected {
+  border-color: var(--text);
+  box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.18);
+}
+
+.custom-color {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  color: var(--text-muted);
+  font-size: 0.8rem;
+  cursor: pointer;
+}
+
+.custom-color input[type="color"] {
+  width: 34px;
+  height: 34px;
+  padding: 0;
+  border: none;
+  background: none;
+  cursor: pointer;
+}
+
+.btn-race {
+  font-size: 1.05rem;
+  padding: 0.85rem 3.25rem;
+  letter-spacing: 0.05em;
+}
+
+/* ================================================================
+   LANGUAGE PICKER MODAL
+   ================================================================ */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(13, 15, 20, 0.85);
+  backdrop-filter: blur(3px);
+  z-index: 50;
+}
+
+.modal {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  padding: 2rem 2.25rem;
+  text-align: center;
+  max-width: 380px;
+  width: 100%;
+}
+
+.modal h2 {
+  margin-bottom: 0.3rem;
+}
+
+.modal .panel-sub {
+  margin-bottom: 1.5rem;
+}
+
+.language-options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  justify-content: center;
+  margin-bottom: 1.25rem;
+}
+
+.lang-btn {
+  font-size: 1rem;
+  padding: 0.75rem 1.75rem;
+}
+
+/* ================================================================
+   RACE SCREEN — HEADER & LIVE STATS
+   ================================================================ */
+.race-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.85rem;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.snippet-label {
+  color: var(--text-muted);
+  font-size: 0.8rem;
+  letter-spacing: 0.02em;
+}
+
+.live-stats {
+  display: flex;
+  gap: 1rem;
+  font-size: 0.85rem;
+}
+
+.stat-pill {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.25rem;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  padding: 0.25rem 0.6rem;
+  border-radius: 3px;
+}
+
+.stat-pill strong {
+  color: var(--text);
+  font-size: 1.05rem;
+}
+
+.stat-unit {
+  color: var(--text-muted);
+  font-size: 0.75rem;
+}
+
+/* ================================================================
+   RACE SCREEN — TRACK
+   ================================================================ */
+.track {
+  position: relative;
+  background:
+    /* subtle horizontal grain */
+    repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 3px,
+      rgba(255, 255, 255, 0.012) 3px,
+      rgba(255, 255, 255, 0.012) 4px
+    ),
+    /* subtle vertical gradient for depth */
+    linear-gradient(180deg, #191d28 0%, #14171f 50%, #191d28 100%);
+  border: 1px solid var(--line);
+  border-top: 3px solid var(--line-bright);
+  padding: 0;
+  margin-bottom: 1.25rem;
+  overflow: hidden;
+  min-height: 90px;
+}
+
+/* Lane styling */
+.lane {
+  position: relative;
+  height: 44px;
+}
+
+/* Dashed lane divider between player and ghost */
+.lane-player::after {
+  content: "";
+  position: absolute;
+  bottom: -1px;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: repeating-linear-gradient(
+    90deg,
+    var(--ghost) 0,
+    var(--ghost) 14px,
+    transparent 14px,
+    transparent 28px
+  );
+  opacity: 0.35;
+}
+
+/* ================================================================
+   RACE SCREEN — CARS (SVG)
+   ================================================================ */
+.car {
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translate(0, -50%);
+  transition: transform 0.06s linear;
+  z-index: 3;
+  filter: drop-shadow(0 0 4px currentColor);
+}
+
+.car-svg {
+  display: block;
+}
+
+.car-player {
+  color: var(--player);
+}
+
+.car-ghost {
+  color: var(--ghost);
+  opacity: 0.65;
+  filter: drop-shadow(0 0 3px var(--ghost-glow));
+}
+
+/* Speed trail behind cars */
+.car::after {
+  content: "";
+  position: absolute;
+  right: 100%;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 24px;
+  height: 50%;
+  background: linear-gradient(to left, currentColor, transparent);
+  opacity: 0.25;
+  border-radius: 2px;
+  pointer-events: none;
+}
+
+/* ================================================================
+   RACE SCREEN — FINISH LINE
+   ================================================================ */
+.finish-line {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: 16px;
+  z-index: 2;
+  /* Checkered pattern */
+  background-color: #fff;
+  background-image:
+    linear-gradient(45deg, #333 25%, transparent 25%, transparent 75%, #333 75%),
+    linear-gradient(45deg, #333 25%, transparent 25%, transparent 75%, #333 75%);
+  background-size: 8px 8px;
+  background-position: 0 0, 4px 4px;
+  opacity: 0.85;
+}
+
+/* ================================================================
+   RACE SCREEN — PARTICLES
+   ================================================================ */
+.particle-container {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+  overflow: hidden;
+}
+
+.exhaust-particle {
+  position: absolute;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--player);
+  opacity: 0.5;
+  animation: exhaustFade 0.45s ease-out forwards;
+}
+
+.exhaust-ghost {
+  background: var(--ghost);
+  opacity: 0.4;
+}
+
+@keyframes exhaustFade {
+  0% {
+    transform: scale(1);
+    opacity: 0.5;
+  }
+  100% {
+    transform: scale(0.1);
+    opacity: 0;
+  }
+}
+
+/* ================================================================
+   RACE SCREEN — COUNTDOWN OVERLAY
+   ================================================================ */
+.countdown-overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(13, 15, 20, 0.88);
+  z-index: 20;
+  backdrop-filter: blur(3px);
+}
+
+.countdown-text {
+  font-family: var(--font-display);
+  font-size: 4rem;
+  font-weight: 700;
+  color: var(--ghost);
+  text-shadow: 0 0 30px var(--ghost-glow), 0 0 60px rgba(240, 180, 41, 0.15);
+  animation: countdownPulse 0.55s ease-out;
+  user-select: none;
+}
+
+@keyframes countdownPulse {
+  0% {
+    transform: scale(2.2);
+    opacity: 0;
+  }
+  35% {
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+/* ================================================================
+   RACE SCREEN — CODE DISPLAY
+   ================================================================ */
+.code-wrapper {
+  background: var(--surface-raised);
+  border: 1px solid var(--line);
+  padding: 1.25rem 1.5rem;
+  margin: 0 0 0.6rem;
+  overflow-x: auto;
+}
+
+.code-display {
+  font-family: var(--font-mono);
+  font-size: 1rem;
+  line-height: 1.75;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+/* ================================================================
+   PRISM.JS TOKEN COLORS (dark theme matching palette)
+   Defined first so state overrides below win by source order.
+   Specificity: .char.pending.token.xxx = 4 classes (0,4,0)
+   ================================================================ */
+.char.pending.token.keyword {
+  color: #ff7b72;
+}
+
+.char.pending.token.function {
+  color: #d2a8ff;
+}
+
+.char.pending.token.string {
+  color: #a5d6ff;
+}
+
+.char.pending.token.number {
+  color: #79c0ff;
+}
+
+.char.pending.token.boolean {
+  color: #79c0ff;
+}
+
+.char.pending.token.operator {
+  color: #ff7b72;
+}
+
+.char.pending.token.punctuation {
+  color: #8b949e;
+}
+
+.char.pending.token.class-name {
+  color: #ffa657;
+}
+
+.char.pending.token.builtin {
+  color: #ffa657;
+}
+
+.char.pending.token.comment {
+  color: #6b7394;
+  font-style: italic;
+}
+
+.char.pending.token.constant {
+  color: #79c0ff;
+}
+
+.char.pending.token.property {
+  color: #79c0ff;
+}
+
+.char.pending.token.trig {
+  color: #ff7b72;
+}
+
+.char.pending.token.prolog {
+  color: #6b7394;
+}
+
+.char.pending.token.doctype {
+  color: #6b7394;
+}
+
+.char.pending.token.cdata {
+  color: #6b7394;
+}
+
+/* ================================================================
+   CHARACTER STATES (game state overrides syntax highlighting)
+   Specificity: .code-display .char.xxx.token = 4 classes (0,4,0)
+   Matches token specificity and wins by source order (defined later).
+   ================================================================ */
+.char {
+  transition: color 0.04s, background-color 0.04s;
+}
+
+.char.pending {
+  color: var(--text-muted);
+}
+
+.code-display .char.correct,
+.code-display .char.correct.token {
+  color: var(--player);
+}
+
+.code-display .char.incorrect,
+.code-display .char.incorrect.token {
+  color: var(--error);
+  background: var(--error-dim);
+  border-radius: 2px;
+}
+
+.code-display .char.current,
+.code-display .char.current.token {
+  border-bottom: 2px solid var(--ghost);
+  padding-bottom: 1px;
+}
+
+/* ================================================================
+   HIDDEN INPUT
+   ================================================================ */
+.hidden-input {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+  height: 0;
+  width: 0;
+}
+
+.hint {
+  color: var(--text-muted);
+  font-size: 0.75rem;
+  margin: 0 0 1rem;
+}
+
+/* ================================================================
+   BUTTONS
+   ================================================================ */
+.btn {
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  padding: 0.55rem 1rem;
+  border: 1px solid var(--line);
+  background: var(--surface-raised);
+  color: var(--text);
+  cursor: pointer;
+  transition: border-color 0.12s, background-color 0.12s, transform 0.1s;
+}
+
+.btn:hover {
+  border-color: var(--line-bright);
+}
+
+.btn:active {
+  transform: scale(0.98);
+}
+
+.btn-primary {
+  background: var(--player);
+  border-color: var(--player);
+  color: #0a1210;
+  font-weight: 700;
+}
+
+.btn-primary:hover {
+  background: #00ccb0;
+  border-color: #00ccb0;
+}
+
+.btn-ghost {
+  background: transparent;
+}
+
+.btn-ghost:hover {
+  background: var(--surface-raised);
+}
+
+/* ================================================================
+   RESULTS SCREEN
+   ================================================================ */
+.results-panel {
+  text-align: left;
+  position: relative;
+}
+
+.new-best-badge {
+  display: inline-block;
+  background: var(--ghost);
+  color: #1a1205;
+  font-weight: 700;
+  font-size: 0.75rem;
+  padding: 0.25rem 0.65rem;
+  margin-bottom: 0.65rem;
+  letter-spacing: 0.02em;
+  animation: badgePop 0.4s ease-out;
+}
+
+@keyframes badgePop {
+  0% {
+    transform: scale(0.5);
+    opacity: 0;
+  }
+  60% {
+    transform: scale(1.1);
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.result-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1px;
+  background: var(--line);
+  border: 1px solid var(--line);
+  margin: 1.25rem 0;
+}
+
+.result-stat {
+  background: var(--surface-raised);
+  padding: 1.15rem 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
+.result-value {
+  font-family: var(--font-display);
+  font-size: 1.85rem;
+  font-weight: 700;
+  color: var(--player);
+  letter-spacing: -0.02em;
+}
+
+.result-label {
+  color: var(--text-muted);
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.result-best {
+  color: var(--text-muted);
+  font-size: 0.8rem;
+}
+
+.result-actions {
+  display: flex;
+  gap: 0.6rem;
+  margin-top: 1.25rem;
+  flex-wrap: wrap;
+}
+
+/* ================================================================
+   CONFETTI
+   ================================================================ */
+.confetti-container {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 100;
+  overflow: hidden;
+}
+
+.confetti-piece {
+  position: absolute;
+  top: -12px;
+  width: 7px;
+  height: 11px;
+  border-radius: 1px;
+  animation: confettiFall linear forwards;
+}
+
+@keyframes confettiFall {
+  0% {
+    transform: translateY(0) rotate(0deg);
+    opacity: 1;
+  }
+  85% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(100vh) rotate(720deg);
+    opacity: 0;
+  }
+}
+
+/* ================================================================
+   RESPONSIVE
+   ================================================================ */
+@media (min-width: 700px) {
+  .panel {
+    margin-bottom: 0;
+  }
+}
+
+@media (max-width: 600px) {
+  main {
+    padding: 1.25rem 1rem 3rem;
+  }
+
+  .app-header {
+    padding: 0.8rem 1rem;
+    gap: 0.5rem;
+  }
+
+  .tagline {
+    display: none;
+  }
+
+  .snippet-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 0.5rem;
+  }
+
+  .track {
+    min-height: 76px;
+  }
+
+  .lane {
+    height: 38px;
+  }
+
+  .car-svg {
+    width: 42px;
+    height: 18px;
+  }
+
+  .code-wrapper {
+    padding: 1rem;
+  }
+
+  .code-display {
+    font-size: 0.85rem;
+  }
+
+  .result-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .result-value {
+    font-size: 1.4rem;
+  }
+
+  .countdown-text {
+    font-size: 3rem;
+  }
+
+  .stat-pill {
+    padding: 0.2rem 0.4rem;
+  }
+
+  .stat-pill strong {
+    font-size: 0.9rem;
+  }
+}
+
+/* ================================================================
+   REDUCED MOTION
+   ================================================================ */
+@media (prefers-reduced-motion: reduce) {
+  .car {
+    transition: none;
+  }
+
+  .car-preview {
+    animation: none;
+  }
+
+  .screen.active {
+    animation: none;
+  }
+
+  .countdown-text {
+    animation: none;
+  }
+
+  .new-best-badge {
+    animation: none;
+  }
+
+  .confetti-piece {
+    animation: none;
+    display: none;
+  }
+
+  .exhaust-particle {
+    animation: none;
+    display: none;
+  }
+}
