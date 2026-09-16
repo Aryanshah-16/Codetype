@@ -1,0 +1,190 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>The Compile Time Trial</title>
+  <link rel="stylesheet" href="style.css" />
+  <!-- Prism.js for syntax highlighting (core + Python) -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-python.min.js" defer></script>
+</head>
+<body>
+
+  <!-- ========== HEADER ========== -->
+  <header class="app-header">
+      <button id="btn-home" class="logo-btn" aria-label="Go to home" title="Home">
+        <span class="logo">The Compile <span class="logo-accent">Time Trial</span></span>
+      </button>
+      <span class="tagline">Just Compile it!</span>
+    <button id="btn-history" class="header-btn" aria-label="View session history">History</button>
+    <button id="btn-sound-toggle" class="sound-toggle" aria-label="Toggle sound" title="Toggle sound">
+      <svg class="icon-sound-on" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/>
+        <path d="M19.07 4.93a10 10 0 0 1 0 14.14"/>
+        <path d="M15.54 8.46a5 5 0 0 1 0 7.07"/>
+      </svg>
+      <svg class="icon-sound-off hidden" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/>
+        <line x1="23" y1="9" x2="17" y2="15"/>
+        <line x1="17" y1="9" x2="23" y2="15"/>
+      </svg>
+    </button>
+  </header>
+
+  <!-- ========== MAIN CONTENT ========== -->
+  <main>
+      <!-- ========== HOME SCREEN ========== -->
+          <section id="screen-home" class="screen active">
+            <div class="panel home-panel">
+              <h1>Ready to race?</h1>
+              <p class="panel-sub">Pick your car color, then hit race.</p>
+
+              <div id="home-car-preview" class="home-car-preview">
+                <span class="car car-preview" aria-label="Your car">
+                  <svg viewBox="0 0 52 22" width="104" height="44" aria-hidden="true" class="car-svg">
+                    <rect x="8" y="0" width="8" height="4" rx="1.5" fill="#181c24"/>
+                    <rect x="8" y="18" width="8" height="4" rx="1.5" fill="#181c24"/>
+                    <rect x="36" y="0" width="8" height="4" rx="1.5" fill="#181c24"/>
+                    <rect x="36" y="18" width="8" height="4" rx="1.5" fill="#181c24"/>
+                    <path d="M4,11 C4,5 14,2 26,2 C38,2 48,5 48,11 C48,17 38,20 26,20 C14,20 4,17 4,11Z" fill="currentColor"/>
+                    <ellipse cx="20" cy="11" rx="6" ry="3.5" fill="rgba(0,0,0,0.35)"/>
+                    <path d="M46,7 L52,11 L46,15" fill="currentColor" opacity="0.7"/>
+                  </svg>
+                </span>
+              </div>
+
+              <!-- ========== COLOR PICKER ========== -->
+              <div class="color-picker">
+                <span class="color-picker-label">Car color</span>
+                <div id="color-swatches" class="color-swatches" role="group" aria-label="Car color presets"></div>
+                <label class="custom-color">
+                  <input type="color" id="custom-color-input" value="#00e5c3" aria-label="Custom car color" />
+                  Custom
+                </label>
+              </div>
+
+              <button id="btn-race" class="btn btn-primary btn-race">Race</button>
+            </div>
+
+            <!-- ========== LANGUAGE PICKER Overlay ========== -->
+            <div id="language-picker" class="modal-overlay hidden">
+              <div class="modal">
+                <h2>Choose your language</h2>
+                <p class="panel-sub">A random passage will be assigned.</p>
+                <div class="language-options">
+                  <button id="btn-lang-python" class="btn btn-primary lang-btn">Python</button>
+                  <button id="btn-lang-java" class="btn btn-primary lang-btn">Java</button>
+                </div>
+                <button id="btn-lang-cancel" class="btn btn-ghost">Cancel</button>
+              </div>
+            </div>
+          </section>
+
+          <!-- ========== RACE SCREEN ========== -->
+    <section id="screen-race" class="screen">
+      <div class="race-header">
+        <span id="snippet-label" class="snippet-label"></span>
+        <div class="live-stats">
+          <span class="stat-pill"><strong id="live-wpm">0</strong> <span class="stat-unit">wpm</span></span>
+          <span class="stat-pill"><strong id="live-accuracy">100</strong><span class="stat-unit">% acc</span></span>
+        </div>
+      </div>
+
+      <!-- ========== RACE TRACK ========== -->
+      <div id="track" class="track">
+        <div class="lane lane-player">
+          <span id="player-car" class="car car-player" aria-label="Player car">
+            <svg viewBox="0 0 52 22" width="52" height="22" aria-hidden="true" class="car-svg">
+              <rect x="8" y="0" width="8" height="4" rx="1.5" fill="#181c24"/>
+              <rect x="8" y="18" width="8" height="4" rx="1.5" fill="#181c24"/>
+              <rect x="36" y="0" width="8" height="4" rx="1.5" fill="#181c24"/>
+              <rect x="36" y="18" width="8" height="4" rx="1.5" fill="#181c24"/>
+              <path d="M4,11 C4,5 14,2 26,2 C38,2 48,5 48,11 C48,17 38,20 26,20 C14,20 4,17 4,11Z" fill="currentColor"/>
+              <ellipse cx="20" cy="11" rx="6" ry="3.5" fill="rgba(0,0,0,0.35)"/>
+              <path d="M46,7 L52,11 L46,15" fill="currentColor" opacity="0.7"/>
+            </svg>
+          </span>
+        </div>
+
+        <!-- ========== GHOST CAR LANE ========== -->
+        <div class="lane lane-ghost">
+          <span id="ghost-car" class="car car-ghost" aria-label="Ghost car">
+            <svg viewBox="0 0 52 22" width="52" height="22" aria-hidden="true" class="car-svg">
+              <rect x="8" y="0" width="8" height="4" rx="1.5" fill="#181c24"/>
+              <rect x="8" y="18" width="8" height="4" rx="1.5" fill="#181c24"/>
+              <rect x="36" y="0" width="8" height="4" rx="1.5" fill="#181c24"/>
+              <rect x="36" y="18" width="8" height="4" rx="1.5" fill="#181c24"/>
+              <path d="M4,11 C4,5 14,2 26,2 C38,2 48,5 48,11 C48,17 38,20 26,20 C14,20 4,17 4,11Z" fill="currentColor"/>
+              <ellipse cx="20" cy="11" rx="6" ry="3.5" fill="rgba(0,0,0,0.35)"/>
+              <path d="M46,7 L52,11 L46,15" fill="currentColor" opacity="0.7"/>
+            </svg>
+          </span>
+        </div>
+        <div class="finish-line"></div>
+
+        <!-- ========== COUNTDOWN OVERLAY ========== -->
+        <div id="countdown-overlay" class="countdown-overlay hidden">
+          <span id="countdown-text" class="countdown-text"></span>
+        </div>
+      </div>
+
+      <pre class="code-wrapper"><code id="code-display" class="code-display"></code></pre>
+
+      <input id="hidden-input" class="hidden-input" autocomplete="off" autocapitalize="off" spellcheck="false" />
+      <p class="hint">Click the track and start typing. Backspace fixes mistakes.</p>
+
+      <button id="btn-race-home" class="btn btn-ghost">&larr; Home</button>
+    </section>
+
+    <!-- ========== HISTORY SCREEN ========== -->
+    <section id="screen-history" class="screen">
+      <div class="panel history-panel">
+        <div class="history-heading">
+          <div>
+            <h1>Session history</h1>
+            <p class="panel-sub">Runs from this browser session only. History resets when the session ends.</p>
+          </div>
+          <button id="btn-clear-history" class="btn btn-ghost">Reset history</button>
+        </div>
+        <ul id="history-list" class="history-list"></ul>
+        <p id="history-empty" class="history-empty">No races this session yet.</p>
+        <button id="btn-history-home" class="btn btn-ghost">&larr; Home</button>
+      </div>
+    </section>
+
+    <!-- ========== RESULTS SCREEN ========== -->
+    <section id="screen-results" class="screen">
+      <div id="confetti-container" class="confetti-container"></div>
+      <div class="panel results-panel">
+        <div id="new-best-badge" class="new-best-badge hidden">&#9733; New personal best</div>
+        <h1>Race complete</h1>
+
+        <div class="result-grid">
+          <div class="result-stat">
+            <span class="result-value" id="result-wpm">0</span>
+            <span class="result-label">WPM</span>
+          </div>
+          <div class="result-stat">
+            <span class="result-value" id="result-accuracy">0%</span>
+            <span class="result-label">Accuracy</span>
+          </div>
+          <div class="result-stat">
+            <span class="result-value" id="result-time">0s</span>
+            <span class="result-label">Time</span>
+          </div>
+        </div>
+
+        <p id="result-best" class="result-best"></p>
+
+        <div class="result-actions">
+          <button id="btn-race-again" class="btn btn-primary">Race again</button>
+                    <button id="btn-results-home" class="btn btn-ghost">Home</button>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script type="module" src="js/main.js"></script>
+</body>
+</html>
